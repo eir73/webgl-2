@@ -168,10 +168,10 @@
 						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 2));
 						break
 					case 'KeyS':
-						let x_axis = new THREE.Vector3( -1, 0, 0 );
+						let x_axiss = new THREE.Vector3( -1, 0, 0 );
 						let quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 2));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 2));
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axiss, 2));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axiss, 2));
 						break
 					case 'KeyA':
 						let y_axis = new THREE.Vector3( 0, 1, 0 );
@@ -180,19 +180,12 @@
 						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 2));
 						break
 					case 'KeyD':
-						let y_axis = new THREE.Vector3( 0, -1, 0 );
+						let y_axiss = new THREE.Vector3( 0, -1, 0 );
 						let quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 2));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 2));
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axiss, 2));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axiss, 2));
 						break
 				}
-					
-					if (changed) {
-						var x_axis = new THREE.Vector3( 1, 0, 0 );
-						var quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, rotation_speed));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, rotation_speed));
-					}
 			}
 			function render() {
 
