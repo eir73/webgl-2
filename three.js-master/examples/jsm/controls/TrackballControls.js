@@ -146,12 +146,11 @@ var TrackballControls = function ( object, domElement ) {
 			objectUpDirection = new Vector3(),
 			objectSidewaysDirection = new Vector3(),
 			moveDirection = new Vector3(),
-			tmpQuaternion = new THREE.Quaternion(),
+			tmpQuaternion = new Quaternion(),
 			angle;
 
 		return function rotateCamera() {
 
-			if (_this.autoRotate) _moveCurr.x += _this.autoRotateSpeed;
 			moveDirection.set( _moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0 );
 			moveDirection.setLength(moveDirection.length() * _this.allSpeedsFactor);
 			angle = moveDirection.length();
