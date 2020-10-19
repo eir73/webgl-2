@@ -32,11 +32,12 @@
 
 			var frustumSize = 400;
 
+			let octahedron;
+			let dodecahedron;
+
 			init();
 			animate();
 
-			let octahedron;
-			let dodecahedron;
 
 			function init() {
 
@@ -73,18 +74,7 @@
         octahedron.matrixAutoUpdate = false
 				scene.add(octahedron);
 				
-				document.onkeypress = e => {
-					if ( e.code === "keyA" )
-						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), 0.3);
-					if ( e.code === "keyD" )
-						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), -0.3);
-					if ( e.code === "keyW" )
-						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), 0.3);
-					if ( e.code === "keyS" )
-						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), -0.3);
-				}
-
-
+			
 				// lights
 
 				var light = new THREE.DirectionalLight( 0xffffff );
@@ -107,6 +97,10 @@
 
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
+
+			
+				//camera.updateMatrix();
+				//camera.updateProjectionMatrix();
 
 				//
 
@@ -173,6 +167,26 @@
 
 				renderer.render( scene, camera );
 
+				document.onkeypress = e => {
+					if ( e.code === "keyA" )
+						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), 0.3);
+					if ( e.code === "keyD" )
+						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), -0.3);
+					if ( e.code === "keyW" )
+						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), 0.3);
+					if ( e.code === "keyS" )
+						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), -0.3);
+
+					var relativeCameraOffset = new THREE.Vector3(0,50,200);
+
+					var cameraOffset = relativeCameraOffset.applyMatrix4( MovingCube.matrixWorld );
+
+					camera.position.x = cameraOffset.x;
+					camera.position.y = cameraOffset.y;
+					camera.position.z = cameraOffset.z;
+					camera.lookAt( MovingCube.position );
+					stats.update()
+				}
 			}
 
 		</script>
