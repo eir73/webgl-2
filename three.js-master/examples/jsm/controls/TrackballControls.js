@@ -222,10 +222,10 @@ var TrackballControls = function ( object, domElement ) {
 	};
 
 	this.panCamera = ( function () {
-		var mouseChange = new THREE.Vector2(),
-					objectUp = new THREE.Vector3(),
-					rv = new THREE.Vector3()
-					pan = new THREE.Vector3();
+		var mouseChange = new Vector2(),
+					objectUp = new Vector3(),
+					rv = new Vector3()
+					pan = new Vector3();
 			return function panCamera() {
 			mouseChange.copy( _panEnd ).sub( _panStart );
 			mouseChange.setLength(mouseChange.length() * this.allSpeedsFactor);
