@@ -168,6 +168,7 @@
 				renderer.render( scene, camera );
 
 				document.onkeypress = e => {
+					console.log(camera)
 					if ( e.code === "keyA" )
 						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), 0.3);
 					if ( e.code === "keyD" )
