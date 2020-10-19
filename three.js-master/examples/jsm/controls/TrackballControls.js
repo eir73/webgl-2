@@ -467,6 +467,8 @@ var TrackballControls = function ( object, domElement ) {
 
 	function keydown( event ) {
 		if ( this.enabled === false ) return;
+
+		console.log(event.code)
 			switch (event.keyCode) {
 				// 81:Q; 87:W; 69:E; 82:R;
 				// 65:A; 83:S; 68:D; 70:F;
@@ -491,22 +493,6 @@ var TrackballControls = function ( object, domElement ) {
 		}
 
 		function keyup( event ) {
-			if ( this.enabled === false ) return;
-			switch (event.keyCode) {
-				// 81:Q; 87:W; 69:E; 82:R;
-				// 65:A; 83:S; 68:D; 70:F;
-				// 90:Z; 88:X; 67:C; 86:V;
-				// 107:+; 109:-; 16:Shift; 17:Ctrl; 18:Alt; 9:Tab;
-				// 38:Up; 37:Left; 40:Down; 39:Right;
-				case 87: // W
-					this.RVMovingFactor = 0.0;
-				break;
-				case 83: // S
-					this.RVMovingFactor = 0.0;
-				break;
-			}
-			
-			//window.addEventListener( 'keydown', keydown, false );
 		}
 
 	function onMouseDown( event ) {
