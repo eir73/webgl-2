@@ -37,7 +37,7 @@
 
 			init();
 			animate();
-
+			let x=0, y=0
 
 			function init() {
 
@@ -61,7 +61,7 @@
         dodecahedron.position.x = 0;
         dodecahedron.position.z = 0;
         dodecahedron.updateMatrix()
-        dodecahedron.matrixAutoUpdate = false
+        dodecahedron.matrixAutoUpdate = true
         scene.add(dodecahedron)
         
         var octahedronGeometry = new THREE.OctahedronGeometry(20,1);
@@ -70,9 +70,16 @@
         octahedron.position.y = -50;
         octahedron.position.x = 0;
         octahedron.position.z = 0;
-        octahedron.updateMatrix();
-        octahedron.matrixAutoUpdate = false
+				octahedron.updateMatrix();
+        octahedron.matrixAutoUpdate = true
 				scene.add(octahedron);
+
+				document.onkeypress = e => {
+					y+=10
+					octahedron.position.y = y
+					octahedron.updateMatrix();
+					render()
+				}
 				
 			
 				// lights
@@ -98,10 +105,6 @@
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
 
-			
-				//camera.updateMatrix();
-				//camera.updateProjectionMatrix();
-
 				//
 
 				var gui = new GUI();
@@ -113,8 +116,6 @@
 
 				} );
 
-				//
-
 				window.addEventListener( 'resize', onWindowResize, false );
 
 				createControls( perspectiveCamera );
@@ -125,7 +126,7 @@
 
 				controls = new TrackballControls( camera, renderer.domElement );
 
-				controls.rotateSpeed = 2.0;
+				controls.rotateSpeed = 4.0;
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
 			}
@@ -160,52 +161,10 @@
 				render();
 
 			}
-			let x=0, y=0
 			function render() {
 
 				var camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
-
 				renderer.render( scene, camera );
-
-
-				
-				document.onkeypress = e => {
-					//console.log(camera)
-					if ( e.code === "KeyA" )
-						y-=3
-					if ( e.code === "KeyD" )
-						y+=3
-					if ( e.code === "KeyW" )
-						x+=3
-					if ( e.code === "KeyS" ) {
-						x-=3
-						console.log(octahedron)
-					}
-
-				/*	var relativeCameraOffset = new THREE.Vector3(0,50,200);
-
-					var cameraOffset = relativeCameraOffset.applyMatrix4( octahedron.matrixWorld );
-
-
-					camera.position.x = cameraOffset.x;
-					camera.position.y = cameraOffset.y;
-					camera.position.z = cameraOffset.z;
-					camera.lookAt( octahedron.position );*/
-
-
-					//stats.update()
-					camera.rotation.x = x;
-					camera.rotation.y = y;
-					//octahedron.rotation.x = x;
-					//octahedron.rotation.y = y;
-					console.log(camera.rotation._onChangeCallback())
-					controls.update();
-
-					stats.update();
-
-					render();
-
-				}
 			}
 
 		</script>
