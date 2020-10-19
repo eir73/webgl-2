@@ -200,111 +200,51 @@ var TrackballControls = function ( object, domElement ) {
 
 
 	this.zoomCamera = function () {
-
 		var factor;
-
 		if ( _state === STATE.TOUCH_ZOOM_PAN ) {
-
-			factor = _touchZoomDistanceStart / _touchZoomDistanceEnd;
+			// добавлен allSpeedsFactor сюда:
+			factor = this.allSpeedsFactor * _touchZoomDistanceStart / _touchZoomDistanceEnd;
 			_touchZoomDistanceStart = _touchZoomDistanceEnd;
-
-			if ( scope.object.isPerspectiveCamera ) {
-
-				_eye.multiplyScalar( factor );
-
-			} else if ( scope.object.isOrthographicCamera ) {
-
-				scope.object.zoom *= factor;
-				scope.object.updateProjectionMatrix();
-
-			} else {
-
-				console.warn( 'THREE.TrackballControls: Unsupported camera type' );
-
-			}
-
+			_eye.multiplyScalar( factor );
 		} else {
-
-			factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * scope.zoomSpeed;
-
+			// добавлен allSpeedsFactor сюда:
+			factor = 1.0 + ( _zoomEnd.y - _zoomStart.y ) * this.zoomSpeed * this.allSpeedsFactor;
 			if ( factor !== 1.0 && factor > 0.0 ) {
-
-				if ( scope.object.isPerspectiveCamera ) {
-
-					_eye.multiplyScalar( factor );
-
-				} else if ( scope.object.isOrthographicCamera ) {
-
-					scope.object.zoom /= factor;
-					scope.object.updateProjectionMatrix();
-
-				} else {
-
-					console.warn( 'THREE.TrackballControls: Unsupported camera type' );
-
-				}
-
-			}
-
-			if ( scope.staticMoving ) {
-
-				_zoomStart.copy( _zoomEnd );
-
-			} else {
-
-				_zoomStart.y += ( _zoomEnd.y - _zoomStart.y ) * this.dynamicDampingFactor;
-
-			}
-
+			_eye.multiplyScalar( factor );
 		}
-
+		if ( this.staticMoving ) {
+			_zoomStart.copy( _zoomEnd );
+		} else {
+			// добавлен allSpeedsFactor сюда:
+			_zoomStart.y += ( _zoomEnd.y - _zoomStart.y ) * this.dynamicDampingFactor * this.allSpeedsFactor;
+		}
+		}
 	};
 
 	this.panCamera = ( function () {
-
-		var mouseChange = new Vector2(),
-			objectUp = new Vector3(),
-			pan = new Vector3();
-
-		return function panCamera() {
-
+		var mouseChange = new THREE.Vector2(),
+					objectUp = new THREE.Vector3(),
+					rv = new THREE.Vector3()
+					pan = new THREE.Vector3();
+			return function panCamera() {
 			mouseChange.copy( _panEnd ).sub( _panStart );
-
-			if ( mouseChange.lengthSq() ) {
-
-				if ( scope.object.isOrthographicCamera ) {
-
-					var scale_x = ( scope.object.right - scope.object.left ) / scope.object.zoom / scope.domElement.clientWidth;
-					var scale_y = ( scope.object.top - scope.object.bottom ) / scope.object.zoom / scope.domElement.clientWidth;
-
-					mouseChange.x *= scale_x;
-					mouseChange.y *= scale_y;
-
-				}
-
-				mouseChange.multiplyScalar( _eye.length() * scope.panSpeed );
-
-				pan.copy( _eye ).cross( scope.object.up ).setLength( mouseChange.x );
-				pan.add( objectUp.copy( scope.object.up ).setLength( mouseChange.y ) );
-
-				scope.object.position.add( pan );
-				scope.target.add( pan );
-
-				if ( scope.staticMoving ) {
-
+			mouseChange.setLength(mouseChange.length() * this.allSpeedsFactor);
+		
+			if ( mouseChange.lengthSq() || this.RVMovingFactor ) {
+				mouseChange.multiplyScalar( _eye.length() * this.panSpeed );
+				pan.copy( _eye ).cross( this.object.up ).setLength( mouseChange.x );
+				pan.add( objectUp.copy( this.object.up ).setLength( mouseChange.y ) );
+				pan.add( rv.copy( _eye ).setLength(this.RVMovingFactor * _eye.length()) );
+				this.object.position.add( pan );
+				this.target.add( pan );
+				if ( this.staticMoving ) {
 					_panStart.copy( _panEnd );
-
 				} else {
-
-					_panStart.add( mouseChange.subVectors( _panEnd, _panStart ).multiplyScalar( scope.dynamicDampingFactor ) );
-
-				}
-
-			}
-
-		};
-
-	}() );
+					_panStart.add( mouseChange.subVectors( _panEnd, _panStart ).multiplyScalar( this.dynamicDampingFactor * this.allSpeedsFactor ) );
+						}
+					}
+				};
+			}() );
 
 	this.checkDistances = function () {
 
