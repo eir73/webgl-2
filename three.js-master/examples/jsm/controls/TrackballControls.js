@@ -152,10 +152,10 @@ var TrackballControls = function ( object, domElement ) {
 		return function rotateCamera() {
 
 			moveDirection.set( _moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0 );
-			moveDirection.setLength(moveDirection.length() * _this.allSpeedsFactor);
+			moveDirection.setLength(moveDirection.length() * this.allSpeedsFactor);
 			angle = moveDirection.length();
 
-			if ( angle || _this.rotationZFactor) {
+			if ( angle || this.rotationZFactor) {
 
 				_eye.copy( scope.object.position ).sub( scope.target );
 
@@ -173,7 +173,7 @@ var TrackballControls = function ( object, domElement ) {
 				angle *= scope.rotateSpeed;
 				quaternion.setFromAxisAngle( axis, angle );
 
-				tmpQuaternion.setFromAxisAngle( eyeDirection, _this.rotationZFactor );
+				tmpQuaternion.setFromAxisAngle( eyeDirection, this.rotationZFactor );
 				quaternion.multiply( tmpQuaternion );
 
 				_eye.applyQuaternion( quaternion );
