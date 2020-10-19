@@ -45,6 +45,11 @@
 				orthographicCamera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 1000 );
 				orthographicCamera.position.z = 200;
 
+				//wasd controls 
+
+				const canvas = document.querySelector('canvas')
+
+				canvas.onkeypress = handleButtonPress
 				// world
 
 				scene = new THREE.Scene();
@@ -121,7 +126,7 @@
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
 
-				controls.keys = [ 65, 83, 68 ];
+				controls.keys = [ 87, 83, 65, 68 ];
 
 			}
 
@@ -162,6 +167,33 @@
 
 				renderer.render( scene, camera );
 
+			}
+
+			function handleButtonPress(e) {
+				let changed = false
+				switch (e.code) {
+					case 'KeyW': 
+						translation[0] += 0.1
+						changed = true
+						break
+					case 'KeyS':
+						translation[0] -= 0.1
+						changed = true
+						break
+					case 'KeyA':
+						translation[0] -=0.1
+						changed = true
+						break
+					case 'KeyD':
+						translation[0] += 0.1
+						changed = true
+						break
+				}
+					
+					if (changed) {
+						drawTriangles()
+						strokeTriangles()
+				}
 			}
 
 
