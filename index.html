@@ -160,30 +160,31 @@
 
 			document.onkeypress = e => {
 				let changed = false
+				let x_axis, y_axis, quaternion
 				switch (e.code) {
 					case 'KeyW': 
-						let x_axis = new THREE.Vector3( 1, 0, 0 );
-						let quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 2));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 2));
+						x_axis = new THREE.Vector3( 1, 0, 0 );
+						quaternion = new THREE.Quaternion;
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 0.5));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 0.5));
 						break
 					case 'KeyS':
-						let x_axiss = new THREE.Vector3( -1, 0, 0 );
-						let quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axiss, 2));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axiss, 2));
+						x_axis = new THREE.Vector3( -1, 0, 0 );
+						quaternion = new THREE.Quaternion;
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 0.5));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(x_axis, 0.5));
 						break
 					case 'KeyA':
-						let y_axis = new THREE.Vector3( 0, 1, 0 );
-						let quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 2));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 2));
+						y_axis = new THREE.Vector3( 0, 1, 0 );
+						quaternion = new THREE.Quaternion;
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 0.5));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 0.5));
 						break
 					case 'KeyD':
-						let y_axiss = new THREE.Vector3( 0, -1, 0 );
-						let quaternion = new THREE.Quaternion;
-						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axiss, 2));
-						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axiss, 2));
+						y_axis = new THREE.Vector3( 0, -1, 0 );
+						quaternion = new THREE.Quaternion;
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 0.5));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 0.5));
 						break
 				}
 			}
