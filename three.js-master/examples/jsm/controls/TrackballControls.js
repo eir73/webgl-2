@@ -505,7 +505,7 @@ var TrackballControls = function ( object, domElement ) {
 					this.RVMovingFactor = 0.0;
 				break;
 			}
-			_state = _prevState;
+			
 			//window.addEventListener( 'keydown', keydown, false );
 		}
 
