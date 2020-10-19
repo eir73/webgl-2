@@ -187,7 +187,7 @@
 					camera.position.y = cameraOffset.y;
 					camera.position.z = cameraOffset.z;
 					camera.lookAt( octahedron.position );
-					camera.rotation.x = 100
+					camera.rotation.x = camera.position.x + 100
 					console.log(camera.rotation.x)
 					stats.update()
 				}
