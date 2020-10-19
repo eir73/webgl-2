@@ -18,40 +18,29 @@
 	<body>
 		<script type="module">
 			import * as THREE from './three.js-master/build/three.module.js';
-
 			import Stats from './three.js-master/examples/jsm/libs/stats.module.js';
 			import { GUI } from './three.js-master/examples/jsm/libs/dat.gui.module.js';
-
 			import { TrackballControls } from './three.js-master/examples/jsm/controls/TrackballControls.js';
 
 			var perspectiveCamera, orthographicCamera, controls, scene, renderer, stats;
-
 			var params = {
 				orthographicCamera: false
 			};
-
 			var frustumSize = 400;
 
 			let octahedron;
 			let dodecahedron;
-			let angle = 0
 			let camera;
 
 			init();
 			animate();
-			let x=0, y=0
 
 			function init() {
-
 				var aspect = window.innerWidth / window.innerHeight;
-
 				perspectiveCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
 				perspectiveCamera.position.z = 200;
-
 				orthographicCamera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 1000 );
 				orthographicCamera.position.z = 200;
-
-				// world
 
 				scene = new THREE.Scene();
 				scene.background = new THREE.Color( 0xcccccc );
@@ -66,7 +55,7 @@
         dodecahedron.matrixAutoUpdate = true
         scene.add(dodecahedron)
         
-        var octahedronGeometry = new THREE.OctahedronGeometry(20,1);
+        var octahedronGeometry = new THREE.OctahedronGeometry(30,1);
         var octahedronMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
         octahedron = new THREE.Mesh(octahedronGeometry, octahedronMaterial);
         octahedron.position.y = -50;
@@ -75,87 +64,59 @@
 				octahedron.updateMatrix();
         octahedron.matrixAutoUpdate = true
 				scene.add(octahedron)
-			
-				// lights
 
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
 				scene.add( light );
-
 				var light = new THREE.DirectionalLight( 0x002288 );
 				light.position.set( - 1, - 1, - 1 );
 				scene.add( light );
-
 				var light = new THREE.AmbientLight( 0x222222 );
 				scene.add( light );
-
-				// renderer
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
 				renderer.setPixelRatio( window.devicePixelRatio );
 				renderer.setSize( window.innerWidth, window.innerHeight );
 				document.body.appendChild( renderer.domElement );
-
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
 
-				//
-
 				var gui = new GUI();
 				gui.add( params, 'orthographicCamera' ).name( 'use orthographic' ).onChange( function ( value ) {
-
 					controls.dispose();
-
 					createControls( value ? orthographicCamera : perspectiveCamera );
-
 				} );
 
 				window.addEventListener( 'resize', onWindowResize, false );
-
 				createControls( perspectiveCamera );
-
 			}
 
 			function createControls( camera ) {
-
 				controls = new TrackballControls( camera, renderer.domElement );
-
 				controls.rotateSpeed = 4.0;
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
 			}
 
 			function onWindowResize() {
-
 				var aspect = window.innerWidth / window.innerHeight;
-
 				perspectiveCamera.aspect = aspect;
 				perspectiveCamera.updateProjectionMatrix();
-
 				orthographicCamera.left = - frustumSize * aspect / 2;
 				orthographicCamera.right = frustumSize * aspect / 2;
 				orthographicCamera.top = frustumSize / 2;
 				orthographicCamera.bottom = - frustumSize / 2;
 				orthographicCamera.updateProjectionMatrix();
-
 				renderer.setSize( window.innerWidth, window.innerHeight );
-
 				controls.handleResize();
-
 			}
 
 			function animate() {
 				requestAnimationFrame( animate );
-
 				controls.update();
-
 				stats.update();
-
-				//render();
 				camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
-				//x
 				renderer.render( scene, camera );
-
 			}
 
 			document.onkeypress = e => {
@@ -188,44 +149,6 @@
 						break
 				}
 			}
-			function render() {
-
-				var camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
-				renderer.render( scene, camera );
-
-				document.onkeypress = e => {
-					let changed = false
-					switch (e.code) {
-						case 'KeyW': 
-							x += 0.1
-							changed = true
-							break
-						case 'KeyS':
-							x -= 0.1
-							changed = true
-							break
-						case 'KeyA':
-							y -=0.1
-							changed = true
-							break
-						case 'KeyD':
-							y += 0.1
-							changed = true
-							break
-					}
-						
-						if (changed) {
-						/*	dodecahedron.rotation.y = y
-							dodecahedron.rotation.x = x
-							octahedron.rotation.x = x
-							octahedron.rotation.y = y*/
-							camera.rotation.x = x
-							camera.rotation.y = y
-							render()
-					}
-				}
-			}
-
 		</script>
 
 	</body>
