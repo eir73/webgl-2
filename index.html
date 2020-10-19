@@ -169,13 +169,13 @@
 
 				document.onkeypress = e => {
 					//console.log(camera)
-					if ( e.code === "keyA" )
+					if ( e.code === "KeyA" )
 						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), 0.3);
-					if ( e.code === "keyD" )
+					if ( e.code === "KeyD" )
 						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), -0.3);
-					if ( e.code === "keyW" )
+					if ( e.code === "KeyW" )
 						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), 0.3);
-					if ( e.code === "keyS" ) {
+					if ( e.code === "KeyS" ) {
 						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), -0.3);
 						console.log(octahedron)
 					}
