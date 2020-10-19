@@ -160,27 +160,29 @@
 				render();
 
 			}
-
+			let x=0, y=0
 			function render() {
 
 				var camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
 
 				renderer.render( scene, camera );
 
+
+				
 				document.onkeypress = e => {
 					//console.log(camera)
 					if ( e.code === "KeyA" )
-						octahedron.rotation.y -= 3
+						y-=3
 					if ( e.code === "KeyD" )
-						octahedron.rotation.y += 3
+						y+=3
 					if ( e.code === "KeyW" )
-						octahedron.rotation.x -= 3;
+						x+=3
 					if ( e.code === "KeyS" ) {
-						octahedron.rotation.x += 3;
+						x-=3
 						console.log(octahedron)
 					}
 
-					var relativeCameraOffset = new THREE.Vector3(0,50,200);
+				/*	var relativeCameraOffset = new THREE.Vector3(0,50,200);
 
 					var cameraOffset = relativeCameraOffset.applyMatrix4( octahedron.matrixWorld );
 
@@ -188,8 +190,10 @@
 					camera.position.x = cameraOffset.x;
 					camera.position.y = cameraOffset.y;
 					camera.position.z = cameraOffset.z;
-					camera.lookAt( octahedron.position );
-					stats.update()
+					camera.lookAt( octahedron.position );*/
+					//stats.update()
+					camera.position.x = x;
+					camera.position.y = y;
 				}
 			}
 
