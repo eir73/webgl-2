@@ -175,8 +175,10 @@
 						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), -0.3);
 					if ( e.code === "keyW" )
 						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), 0.3);
-					if ( e.code === "keyS" )
+					if ( e.code === "keyS" ) {
 						octahedron.rotateOnAxis( new THREE.Vector3(1,0,0), -0.3);
+						console.log(octahedron)
+					}
 
 					var relativeCameraOffset = new THREE.Vector3(0,50,200);
 
@@ -187,8 +189,6 @@
 					camera.position.y = cameraOffset.y;
 					camera.position.z = cameraOffset.z;
 					camera.lookAt( octahedron.position );
-					camera.rotation._x = camera.rotation._x + 100
-					console.log(camera.rotation.x)
 					stats.update()
 				}
 			}
