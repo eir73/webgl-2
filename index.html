@@ -168,7 +168,7 @@
 				renderer.render( scene, camera );
 
 				document.onkeypress = e => {
-					console.log(camera)
+					//console.log(camera)
 					if ( e.code === "keyA" )
 						octahedron.rotateOnAxis( new THREE.Vector3(0,1,0), 0.3);
 					if ( e.code === "keyD" )
@@ -182,10 +182,13 @@
 
 					var cameraOffset = relativeCameraOffset.applyMatrix4( octahedron.matrixWorld );
 
+
 					camera.position.x = cameraOffset.x;
 					camera.position.y = cameraOffset.y;
 					camera.position.z = cameraOffset.z;
 					camera.lookAt( octahedron.position );
+					camera.rotation.x += 3	
+					console.log(camera.rotation.x)
 					stats.update()
 				}
 			}
