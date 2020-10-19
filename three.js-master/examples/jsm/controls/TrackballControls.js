@@ -331,8 +331,8 @@ var TrackballControls = function ( object, domElement ) {
 	this.update = function () {
 
 		_eye.subVectors( scope.object.position, scope.target );
-		_this.RVMovingFactor = 0.0;
-		_this.rotationZFactor = 0.0;
+		this.RVMovingFactor = 0.0;
+		this.rotationZFactor = 0.0;
 
 		if ( ! scope.noRotate ) {
 
@@ -466,7 +466,7 @@ var TrackballControls = function ( object, domElement ) {
 	}
 
 	function keydown( event ) {
-		if ( _this.enabled === false ) return;
+		if ( this.enabled === false ) return;
 			switch (event.keyCode) {
 				// 81:Q; 87:W; 69:E; 82:R;
 				// 65:A; 83:S; 68:D; 70:F;
@@ -474,24 +474,24 @@ var TrackballControls = function ( object, domElement ) {
 				// 107:+; 109:-; 16:Shift; 17:Ctrl; 18:Alt; 9:Tab;
 				// 38:Up; 37:Left; 40:Down; 39:Right;
 				case 87:
-					_this.RVMovingFactor = -0.002 * _this.allSpeedsFactor;//W
+					this.RVMovingFactor = -0.002 * this.allSpeedsFactor;//W
 				break;
 				case 83:
-					_this.RVMovingFactor = 0.002 * _this.allSpeedsFactor;//S
+					this.RVMovingFactor = 0.002 * this.allSpeedsFactor;//S
 				break;
 				case 65:
 					_movePrev.copy( _moveCurr );
-					_moveCurr.x -= 0.01 * _this.allSpeedsFactor; //A
+					_moveCurr.x -= 0.01 * this.allSpeedsFactor; //A
 				break;
 				case 68:
 					_movePrev.copy( _moveCurr );
-					_moveCurr.x += 0.01 * _this.allSpeedsFactor; //D
+					_moveCurr.x += 0.01 * this.allSpeedsFactor; //D
 				break;
 			}
 		}
 
 		function keyup( event ) {
-			if ( _this.enabled === false ) return;
+			if ( this.enabled === false ) return;
 			switch (event.keyCode) {
 				// 81:Q; 87:W; 69:E; 82:R;
 				// 65:A; 83:S; 68:D; 70:F;
@@ -499,10 +499,10 @@ var TrackballControls = function ( object, domElement ) {
 				// 107:+; 109:-; 16:Shift; 17:Ctrl; 18:Alt; 9:Tab;
 				// 38:Up; 37:Left; 40:Down; 39:Right;
 				case 87: // W
-					_this.RVMovingFactor = 0.0;
+					this.RVMovingFactor = 0.0;
 				break;
 				case 83: // S
-					_this.RVMovingFactor = 0.0;
+					this.RVMovingFactor = 0.0;
 				break;
 			}
 			_state = _prevState;
