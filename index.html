@@ -72,39 +72,7 @@
         octahedron.position.z = 0;
 				octahedron.updateMatrix();
         octahedron.matrixAutoUpdate = true
-				scene.add(octahedron);
-
-				document.onkeypress = e => {
-					let changed = false
-					switch (e.code) {
-						case 'KeyW': 
-							x += 0.1
-							changed = true
-							break
-						case 'KeyS':
-							x -= 0.1
-							changed = true
-							break
-						case 'KeyA':
-							y -=0.1
-							changed = true
-							break
-						case 'KeyD':
-							y += 0.1
-							changed = true
-							break
-					}
-						
-						if (changed) {
-							dodecahedron.rotation.y = y
-							dodecahedron.rotation.x = x
-							octahedron.rotation.x = x
-							octahedron.rotation.y = y
-							octahedron.updateMatrix();
-							render()
-					}
-				}
-				
+				scene.add(octahedron)
 			
 				// lights
 
@@ -189,6 +157,38 @@
 
 				var camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
 				renderer.render( scene, camera );
+
+				document.onkeypress = e => {
+					let changed = false
+					switch (e.code) {
+						case 'KeyW': 
+							x += 0.1
+							changed = true
+							break
+						case 'KeyS':
+							x -= 0.1
+							changed = true
+							break
+						case 'KeyA':
+							y -=0.1
+							changed = true
+							break
+						case 'KeyD':
+							y += 0.1
+							changed = true
+							break
+					}
+						
+						if (changed) {
+						/*	dodecahedron.rotation.y = y
+							dodecahedron.rotation.x = x
+							octahedron.rotation.x = x
+							octahedron.rotation.y = y*/
+							camera.rotation.x = x
+							camera.rotation.y = y
+							render()
+					}
+				}
 			}
 
 		</script>
