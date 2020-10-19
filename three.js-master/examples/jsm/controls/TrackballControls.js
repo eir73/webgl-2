@@ -225,7 +225,7 @@ var TrackballControls = function ( object, domElement ) {
 		var mouseChange = new Vector2(),
 					objectUp = new Vector3(),
 					rv = new Vector3()
-					pan = new Vector3();
+					var pan = new Vector3();
 			return function panCamera() {
 			mouseChange.copy( _panEnd ).sub( _panStart );
 			mouseChange.setLength(mouseChange.length() * this.allSpeedsFactor);
