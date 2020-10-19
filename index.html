@@ -141,7 +141,7 @@
 				controls.handleResize();
 
 			}
-
+let angle = 0
 			function animate() {
 
 				requestAnimationFrame( animate );
@@ -150,7 +150,13 @@
 
 				stats.update();
 
-				render();
+				//render();
+				var camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
+				camera.position.x = 500 * Math.cos( angle );  
+				camera.position.z = 500 * Math.sin( angle );
+				renderer.render( scene, camera );
+
+				angle += 0.01;
 
 			}
 			function render() {
