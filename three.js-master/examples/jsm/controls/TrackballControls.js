@@ -17,6 +17,12 @@ var TrackballControls = function ( object, domElement ) {
 	this.object = object;
 	this.domElement = domElement;
 
+	this.rotationZFactor = 0.0;
+	this.RVMovingFactor = 0.0;
+	this.autoRotate = false;
+	this.autoRotateSpeed = 0.001;
+	this.allSpeedsFactor = 1;
+
 	// API
 
 	this.enabled = true;
@@ -140,14 +146,17 @@ var TrackballControls = function ( object, domElement ) {
 			objectUpDirection = new Vector3(),
 			objectSidewaysDirection = new Vector3(),
 			moveDirection = new Vector3(),
+			tmpQuaternion = new THREE.Quaternion(),
 			angle;
 
 		return function rotateCamera() {
 
+			if (_this.autoRotate) _moveCurr.x += _this.autoRotateSpeed;
 			moveDirection.set( _moveCurr.x - _movePrev.x, _moveCurr.y - _movePrev.y, 0 );
+			moveDirection.setLength(moveDirection.length() * _this.allSpeedsFactor);
 			angle = moveDirection.length();
 
-			if ( angle ) {
+			if ( angle || _this.rotationZFactor) {
 
 				_eye.copy( scope.object.position ).sub( scope.target );
 
@@ -164,6 +173,9 @@ var TrackballControls = function ( object, domElement ) {
 
 				angle *= scope.rotateSpeed;
 				quaternion.setFromAxisAngle( axis, angle );
+
+				tmpQuaternion.setFromAxisAngle( eyeDirection, _this.rotationZFactor );
+				quaternion.multiply( tmpQuaternion );
 
 				_eye.applyQuaternion( quaternion );
 				scope.object.up.applyQuaternion( quaternion );
@@ -320,6 +332,8 @@ var TrackballControls = function ( object, domElement ) {
 	this.update = function () {
 
 		_eye.subVectors( scope.object.position, scope.target );
+		_this.RVMovingFactor = 0.0;
+		_this.rotationZFactor = 0.0;
 
 		if ( ! scope.noRotate ) {
 
@@ -453,40 +467,48 @@ var TrackballControls = function ( object, domElement ) {
 	}
 
 	function keydown( event ) {
-
-		if ( scope.enabled === false ) return;
-
-		window.removeEventListener( 'keydown', keydown );
-
-		if ( _keyState !== STATE.NONE ) {
-
-			return;
-
-		} else if ( event.keyCode === scope.keys[ STATE.ROTATE ] && ! scope.noRotate ) {
-
-			_keyState = STATE.ROTATE;
-
-		} else if ( event.keyCode === scope.keys[ STATE.ZOOM ] && ! scope.noZoom ) {
-
-			_keyState = STATE.ZOOM;
-
-		} else if ( event.keyCode === scope.keys[ STATE.PAN ] && ! scope.noPan ) {
-
-			_keyState = STATE.PAN;
-
+		if ( _this.enabled === false ) return;
+			switch (event.keyCode) {
+				// 81:Q; 87:W; 69:E; 82:R;
+				// 65:A; 83:S; 68:D; 70:F;
+				// 90:Z; 88:X; 67:C; 86:V;
+				// 107:+; 109:-; 16:Shift; 17:Ctrl; 18:Alt; 9:Tab;
+				// 38:Up; 37:Left; 40:Down; 39:Right;
+				case 87:
+					_this.RVMovingFactor = -0.002 * _this.allSpeedsFactor;//W
+				break;
+				case 83:
+					_this.RVMovingFactor = 0.002 * _this.allSpeedsFactor;//S
+				break;
+				case 65:
+					_movePrev.copy( _moveCurr );
+					_moveCurr.x -= 0.01 * _this.allSpeedsFactor; //A
+				break;
+				case 68:
+					_movePrev.copy( _moveCurr );
+					_moveCurr.x += 0.01 * _this.allSpeedsFactor; //D
+				break;
+			}
 		}
 
-	}
-
-	function keyup() {
-
-		if ( scope.enabled === false ) return;
-
-		_keyState = STATE.NONE;
-
-		window.addEventListener( 'keydown', keydown, false );
-
-	}
+		function keyup( event ) {
+			if ( _this.enabled === false ) return;
+			switch (event.keyCode) {
+				// 81:Q; 87:W; 69:E; 82:R;
+				// 65:A; 83:S; 68:D; 70:F;
+				// 90:Z; 88:X; 67:C; 86:V;
+				// 107:+; 109:-; 16:Shift; 17:Ctrl; 18:Alt; 9:Tab;
+				// 38:Up; 37:Left; 40:Down; 39:Right;
+				case 87: // W
+					_this.RVMovingFactor = 0.0;
+				break;
+				case 83: // S
+					_this.RVMovingFactor = 0.0;
+				break;
+			}
+			_state = _prevState;
+			//window.addEventListener( 'keydown', keydown, false );
+		}
 
 	function onMouseDown( event ) {
 
