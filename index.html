@@ -179,7 +179,7 @@
 
 					var relativeCameraOffset = new THREE.Vector3(0,50,200);
 
-					var cameraOffset = relativeCameraOffset.applyMatrix4( MovingCube.matrixWorld );
+					var cameraOffset = relativeCameraOffset.applyMatrix4( octahedron.matrixWorld );
 
 					camera.position.x = cameraOffset.x;
 					camera.position.y = cameraOffset.y;
