@@ -20,6 +20,7 @@
 		<script type="module">
 			import * as THREE from './three.js-master/build/three.module.js';
 			import Stats from './three.js-master/examples/jsm/libs/stats.module.js';
+			import ParametricGeometries from './three.js-master/examples/jsm/geometries/ParametricGeomerty.js';
 			import { GUI } from './three.js-master/examples/jsm/libs/dat.gui.module.js';
 			import { TrackballControls } from './three.js-master/examples/jsm/controls/TrackballControls.js';
 
@@ -96,7 +97,7 @@
 				var mesh = new THREE.Mesh( geometry, materialBG );
 				scene.add( mesh );*/
 				//createGraph()
-				var geometryy = new THREE.ParametricGeometry( THREE.ParametricGeometries.klein, 25, 25 );
+				var geometryy = new THREE.ParametricGeometry( ParametricGeometries.klein, 25, 25 );
 				var materiall = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
 				var klein = new THREE.Mesh( geometryy, materiall );
 				scene.add( klein );
