@@ -37,7 +37,7 @@
 
 			function init() {
 				var aspect = window.innerWidth / window.innerHeight;
-				perspectiveCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 1000 );
+				perspectiveCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 10000 );
 				perspectiveCamera.position.z = 200;
 				orthographicCamera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 1000 );
 				orthographicCamera.position.z = 200;
@@ -59,6 +59,8 @@
         dodecahedron.updateMatrix()
         dodecahedron.matrixAutoUpdate = true
         scene.add(dodecahedron)
+				/*var gridHelper = new THREE.GridHelper( 1000, 20 );
+				scene.add( gridHelper );*/
         
         var octahedronGeometry = new THREE.OctahedronGeometry(30,1);
         var octahedronMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
@@ -70,13 +72,49 @@
         octahedron.matrixAutoUpdate = true
 				scene.add(octahedron)
 
+				var planeGeo = new THREE.PlaneGeometry( 500.1, 500.1 );
+
+				var planeTop = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xffffff } ) );
+				planeTop.position.y = 250;
+				planeTop.rotateX( Math.PI / 2 );
+				scene.add( planeTop );
+
+				var planeBottom = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xffffff } ) );
+				planeBottom.position.y = -250;
+				planeBottom.rotateX( - Math.PI / 2 );
+				scene.add( planeBottom );
+
+				var planeFront = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0x7f7fff } ) );
+				planeFront.position.z = 250;
+				planeFront.position.y = 0;
+				planeFront.rotateY( Math.PI );
+				scene.add( planeFront );
+
+				var planeBack = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0x7f7fff } ) );
+				planeFront.position.z = -250;
+				planeFront.position.y = 0;
+				planeFront.rotateY( Math.PI );
+				scene.add( planeFront );
+
+				var planeRight = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0x00ff00 } ) );
+				planeRight.position.x = 250;
+				planeRight.position.y = 0;
+				planeRight.rotateY( - Math.PI / 2 );
+				scene.add( planeRight );
+
+				var planeLeft = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xff0000 } ) );
+				planeLeft.position.x = - 250;
+				planeLeft.position.y = 0;
+				planeLeft.rotateY( Math.PI / 2 );
+				scene.add( planeLeft );
+
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
 				scene.add( light );
 				var light = new THREE.DirectionalLight( 0x002288 );
 				light.position.set( - 1, - 1, - 1 );
 				scene.add( light );
-				var light = new THREE.AmbientLight( 0x222222 );
+				var light = new THREE.AmbientLight( 0x555555 );
 				scene.add( light );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
