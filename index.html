@@ -28,7 +28,7 @@
 			};
 			var frustumSize = 400;
 
-			let octahedron;
+			let sphere;
 			let dodecahedron;
 			let camera;
 
@@ -59,54 +59,29 @@
         dodecahedron.updateMatrix()
         dodecahedron.matrixAutoUpdate = true
         scene.add(dodecahedron)
-				/*var gridHelper = new THREE.GridHelper( 1000, 20 );
-				scene.add( gridHelper );*/
+				var gridHelper = new THREE.GridHelper( 1000, 100 );
+				scene.add( gridHelper );
         
-        var octahedronGeometry = new THREE.OctahedronGeometry(30,1);
-        var octahedronMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
-        octahedron = new THREE.Mesh(octahedronGeometry, octahedronMaterial);
-        octahedron.position.y = -50;
-        octahedron.position.x = 0;
-        octahedron.position.z = 0;
-				octahedron.updateMatrix();
-        octahedron.matrixAutoUpdate = true
-				scene.add(octahedron)
+        var sphereGeometry = new THREE.SphereBufferGeometry(30, 60, 40);
+        var sphereMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
+        sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
+        sphere.position.y = -50;
+        sphere.position.x = 0;
+        sphere.position.z = 0;
+				sphere.updateMatrix();
+        sphere.matrixAutoUpdate = true
+				scene.add(sphere)
 
-				var planeGeo = new THREE.PlaneGeometry( 500.1, 500.1 );
+				var geometry = new THREE.SphereBufferGeometry( 5000, 60, 40 );
+				// invert the geometry on the x-axis so that all of the faces point inward
+				geometry.scale( - 1, 1, 1 );
 
-				var planeTop = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xffffff } ) );
-				planeTop.position.y = 250;
-				planeTop.rotateX( Math.PI / 2 );
-				scene.add( planeTop );
+				var texture = new THREE.TextureLoader().load( 'textures/2294472375_24a3b8ef46_o.jpg' );
+				var materialBG = new THREE.MeshBasicMaterial( { map: texture } );
 
-				var planeBottom = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xffffff } ) );
-				planeBottom.position.y = -250;
-				planeBottom.rotateX( - Math.PI / 2 );
-				scene.add( planeBottom );
+				var mesh = new THREE.Mesh( geometry, materialBG );
 
-				var planeFront = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0x7f7fff } ) );
-				planeFront.position.z = 250;
-				planeFront.position.y = 0;
-				planeFront.rotateY( Math.PI );
-				scene.add( planeFront );
-
-				var planeBack = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0x7f7fff } ) );
-				planeFront.position.z = -250;
-				planeFront.position.y = 0;
-				planeFront.rotateY( Math.PI );
-				scene.add( planeFront );
-
-				var planeRight = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0x00ff00 } ) );
-				planeRight.position.x = 250;
-				planeRight.position.y = 0;
-				planeRight.rotateY( - Math.PI / 2 );
-				scene.add( planeRight );
-
-				var planeLeft = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xff0000 } ) );
-				planeLeft.position.x = - 250;
-				planeLeft.position.y = 0;
-				planeLeft.rotateY( Math.PI / 2 );
-				scene.add( planeLeft );
+				scene.add( mesh );
 
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
@@ -139,6 +114,7 @@
 				controls.rotateSpeed = 4.0;
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
+				controls.maxDistance = 5000;
 			}
 
 			function onWindowResize() {
