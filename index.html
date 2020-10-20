@@ -99,17 +99,18 @@
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
 
-				var gui = new GUI();
+			/*	var gui = new GUI();
 				gui.add( params, 'orthographicCamera' ).name( 'use orthographic' ).onChange( function ( value ) {
 					controls.dispose();
 					createControls( value ? orthographicCamera : perspectiveCamera );
-				} );
+				} );*/
 
 				window.addEventListener( 'resize', onWindowResize, false );
 				createControls( perspectiveCamera );
 			}
 
 			function createControls( camera ) {
+				console.log(camera)
 				controls = new TrackballControls( camera, renderer.domElement );
 				controls.rotateSpeed = 4.0;
 				controls.zoomSpeed = 1.2;
@@ -166,6 +167,14 @@
 						camera.position.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 0.5));
 						camera.up.applyQuaternion(quaternion.setFromAxisAngle(y_axis, 0.5));
 						break
+					case 'KeyP': 
+						controls.dispose();
+						createControls( perspectiveCamera );
+						break;
+					case 'KeyO': 
+						controls.dispose();
+						createControls( orthographicCamera );
+						break;
 				}
 			}
 		</script>
