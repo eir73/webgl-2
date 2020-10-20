@@ -95,7 +95,11 @@
 				var materialBG = new THREE.MeshBasicMaterial( { map: texture } );
 				var mesh = new THREE.Mesh( geometry, materialBG );
 				scene.add( mesh );*/
-				createGraph()
+				//createGraph()
+				var geometryy = new THREE.ParametricGeometry( THREE.ParametricGeometries.klein, 25, 25 );
+				var materiall = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+				var klein = new THREE.Mesh( geometryy, materiall );
+				scene.add( klein );
 
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
@@ -201,10 +205,19 @@
 						return new THREE.Vector3(x, y, z);
 				};
 				
+
+
+			
+
+
+
+
 				// true => sensible image tile repeat...
 				graphGeometry = new THREE.ParametricGeometry( meshFunction, segments, segments, true );
 				// material choices: vertexColorMaterial, wireMaterial , normMaterial , shadeMaterial
 				
+				
+
 				graphGeometry.computeBoundingBox();
 				zMin = graphGeometry.boundingBox.min.z;
 				zMax = graphGeometry.boundingBox.max.z;
@@ -234,8 +247,6 @@
 					// renderer.deallocateObject( graphMesh );
 				}
 				wireMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, side:THREE.DoubleSide } );
-
-				wireMaterial.map.repeat.set( segments, segments );
 				
 				graphMesh = new THREE.Mesh( graphGeometry, wireMaterial );
 				graphMesh.doubleSided = true;
