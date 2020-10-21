@@ -76,8 +76,8 @@
         dodecahedron.matrixAutoUpdate = true
         scene.add(dodecahedron)
 
-			//	var gridHelper = new THREE.GridHelper( 1000, 50 );
-			//	scene.add( gridHelper )
+				var gridHelper = new THREE.GridHelper( 1000, 50 );
+				scene.add( gridHelper )
 
         var texture = new THREE.TextureLoader().load( 'textures/w.jpg' );
         var sphereGeometry = new THREE.SphereBufferGeometry(30, 60, 40);
@@ -96,15 +96,17 @@
 				var materialBG = new THREE.MeshBasicMaterial( { map: texture } );
 				var mesh = new THREE.Mesh( geometry, materialBG );
 				scene.add( mesh );*/
-				//createGraph()
-				var geometryy = new THREE.ParametricGeometry( ParametricGeometries.klein, 25, 25 );
-				var materiall = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
-				var klein = new THREE.Mesh( geometryy, materiall );
+	
+				var geometry = new THREE.ParametricGeometry( GraphBuilder(300, 300), 25, 25 );
+				var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, side:THREE.DoubleSide } );
+				var klein = new THREE.Mesh( geometry, material );
+				klein.doubleSided = true;
 				scene.add( klein );
 
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
 				scene.add( light );
+
 				var light = new THREE.DirectionalLight( 0x222222 );
 				light.position.set( - 1, - 1, - 1 );
 				scene.add( light );
@@ -192,66 +194,17 @@
 				}
 			}
 
-			function createGraph() {
-				xRange = xMax - xMin;
-				yRange = yMax - yMin;
-				zFunc = (x, y) => Math.sqrt(x*y);
-				meshFunction = function(x, y) {
-					var x = xRange * x + xMin;
-					var y = yRange * y + yMin;
-					var z = zFunc(x,y);
-					if ( isNaN(z) )
-						return new THREE.Vector3(0,0,0); // TODO: better fix
-					else
-						return new THREE.Vector3(x, y, z);
-				};
+			function GraphBuilder(width, height) {
 				
+				return function f(u, v, target) {
+					let x = u * width
+					let y = v * height
+					let z
 
+					z = Math.sqrt(x * y)
 
-			
-
-
-
-
-				// true => sensible image tile repeat...
-				graphGeometry = new THREE.ParametricGeometry( meshFunction, segments, segments, true );
-				// material choices: vertexColorMaterial, wireMaterial , normMaterial , shadeMaterial
-				
-				
-
-				graphGeometry.computeBoundingBox();
-				zMin = graphGeometry.boundingBox.min.z;
-				zMax = graphGeometry.boundingBox.max.z;
-				zRange = zMax - zMin;
-				var color, point, face, numberOfSides, vertexIndex;
-				// faces are indexed using characters
-				var faceIndices = [ 'a', 'b', 'c', 'd' ];
-				// first, assign colors to vertices as desired
-				for ( var i = 0; i < graphGeometry.vertices.length; i++ ) {
-					point = graphGeometry.vertices[ i ];
-					color = new THREE.Color( 0x0000ff );
-					color.setHSL( 0.7 * (zMax - point.z) / zRange, 1, 0.5 );
-					graphGeometry.colors[i] = color; // use this array for convenience
+					target.set(x, y, z)
 				}
-				// copy the colors as necessary to the face's vertexColors array.
-				for ( var i = 0; i < graphGeometry.faces.length; i++ ) {
-					face = graphGeometry.faces[ i ];
-					numberOfSides = ( face instanceof THREE.Face3 ) ? 3 : 4;
-					for( var j = 0; j < numberOfSides; j++ ) {
-						vertexIndex = face[ faceIndices[ j ] ];
-						face.vertexColors[ j ] = graphGeometry.colors[ vertexIndex ];
-					}
-				}
-
-				if (graphMesh) {
-					scene.remove( graphMesh );
-					// renderer.deallocateObject( graphMesh );
-				}
-				wireMaterial = new THREE.MeshBasicMaterial( { color: 0xffffff, side:THREE.DoubleSide } );
-				
-				graphMesh = new THREE.Mesh( graphGeometry, wireMaterial );
-				graphMesh.doubleSided = true;
-				scene.add(graphMesh);
 			}
 		</script>
 
