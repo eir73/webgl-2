@@ -50,10 +50,10 @@
 				var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );//создание куба
 				skyBox.rotation.x += Math.PI/2;
 				scene.add( skyBox );*/
-        var dodecahedronGeometry = new THREE.DodecahedronGeometry(30,1);
+        var dodecahedronGeometry = new THREE.DodecahedronGeometry(50,1);
 				var material = new THREE.MeshPhongMaterial( { color: 0xffff00, wireframe: true } );
 				dodecahedron = new THREE.Mesh(dodecahedronGeometry, material);
-        dodecahedron.position.y = 50;
+        dodecahedron.position.y = -100;
         dodecahedron.position.x = 0;
         dodecahedron.position.z = 0;
         dodecahedron.updateMatrix()
@@ -62,17 +62,17 @@
 				/*var gridHelper = new THREE.GridHelper( 1000, 20 );
 				scene.add( gridHelper );*/
         
-        var octahedronGeometry = new THREE.OctahedronGeometry(30,1);
+        var octahedronGeometry = new THREE.OctahedronGeometry(50,1);
         var octahedronMaterial = new THREE.MeshPhongMaterial({color: 0xff0000});
         octahedron = new THREE.Mesh(octahedronGeometry, octahedronMaterial);
-        octahedron.position.y = -50;
+        octahedron.position.y = 100;
         octahedron.position.x = 0;
         octahedron.position.z = 0;
 				octahedron.updateMatrix();
         octahedron.matrixAutoUpdate = true
 				scene.add(octahedron)
 
-				var planeGeo = new THREE.PlaneGeometry( 500.1, 500.1 );
+				var planeGeo = new THREE.PlaneGeometry( 500, 500 );
 
 				var planeTop = new THREE.Mesh( planeGeo, new THREE.MeshPhongMaterial( { color: 0xffffff } ) );
 				planeTop.position.y = 250;
@@ -107,6 +107,15 @@
 				planeLeft.position.y = 0;
 				planeLeft.rotateY( Math.PI / 2 );
 				scene.add( planeLeft );
+
+				var geometry = new THREE.ParametricGeometry( CreatePlot(100, 100), 200, 200 );
+        var material = new THREE.MeshPhongMaterial( { 
+          color: 0xa4a4a4,
+          side: THREE.DoubleSide,
+         } );
+        var plot = new THREE.Mesh( geometry, material );
+        plot.doubleSided = true;
+        scene.add( plot );
 
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
@@ -192,6 +201,22 @@
 						break
 				}
 			}
+
+			function CreatePlot(w, h) {
+        
+        return (posX, posY, target) => {
+          let x = posX * w
+          let y = posY * h
+          let z
+
+					z = Math.sin(x) * Math.sqrt(y)
+
+					y = y - h / 2;
+					x = x - w / 2
+
+          target.set(x, y, z)
+        }
+      }
 		</script>
 
 	</body>
