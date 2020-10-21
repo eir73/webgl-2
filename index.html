@@ -4,15 +4,6 @@
 		<title>three.js webgl - trackball controls</title>
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-		<style>
-			body {
-				background-color: #ccc;
-				color: #000;
-			}
-			a {
-				color: #f00;
-			}
-		</style>
 	</head>
 
 	<body>
@@ -55,7 +46,6 @@
 				cone.position.y = -160;
 				scene.add( cone )
 
-				
 				var sphere = createSphere(5000, 60, 40)
 				scene.add( sphere );
 
@@ -157,36 +147,34 @@
 				requestAnimationFrame( animate );
 				controls.update();
 				stats.update();
-				camera = cameraState ? cameraState : perspectiveCamera;
+				camera = ( params.orthographicCamera ) ? orthographicCamera : perspectiveCamera;
 				renderer.render( scene, camera );
 			}
 
 			document.onkeypress = e => {
-				let changed = false
 				let vector
 				let quaternion = new THREE.Quaternion
 				switch (e.code) {
 					case 'KeyW':
 						vector = new THREE.Vector3( 1, 0, 0 )
-						changed = true
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
 						break
 					case 'KeyS':
 						vector = new THREE.Vector3( -1, 0, 0 )
-						changed = true
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
 						break
 					case 'KeyA':
 						vector = new THREE.Vector3( 0, 1, 0 )
-						changed = true
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
 						break
 					case 'KeyD':
 						vector = new THREE.Vector3( 0, -1, 0 )
-						changed = true
+						camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
+						camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
 						break;
-				}
-
-				if (changed) {
-					camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
-					camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
 				}
 			}
 
