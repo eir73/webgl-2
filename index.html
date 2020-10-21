@@ -27,9 +27,9 @@
 			var params = {
 				orthographicCamera: false
 			};
-			var frustumSize = 400;
+			var frustumSize = 1000;
 
-			let sphere;
+			let cone;
 			let dodecahedron;
 			let camera;
 			let cameraState;
@@ -42,51 +42,37 @@
 				var aspect = window.innerWidth / window.innerHeight;
 				perspectiveCamera = new THREE.PerspectiveCamera( 60, aspect, 1, 10000 );
 				perspectiveCamera.position.z = 200;
-				orthographicCamera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 1000 );
-				orthographicCamera.position.z = 200;
+				orthographicCamera = new THREE.OrthographicCamera( frustumSize * aspect / - 2, frustumSize * aspect / 2, frustumSize / 2, frustumSize / - 2, 1, 10000 );
+				orthographicCamera.position.z = 500;
 
 				scene = new THREE.Scene();
-				var texture = new THREE.TextureLoader().load( 'https://images.pexels.com/photos/1205301/pexels-photo-1205301.jpeg' );;
-				scene.background = texture
-        var dodecahedronGeometry = new THREE.DodecahedronGeometry(30,1);
-				var material = new THREE.MeshPhongMaterial( { 
-					color: 0x00ffdd, 
-					wireframe: true,
-					} );
-				dodecahedron = new THREE.Mesh(dodecahedronGeometry, material);
-        dodecahedron.position.y = 50;
-        dodecahedron.position.x = 0;
-        dodecahedron.position.z = 0;
-        dodecahedron.updateMatrix()
-        dodecahedron.matrixAutoUpdate = true
-        scene.add(dodecahedron)
-				var gridHelper = new THREE.GridHelper( 1000, 50 );
-				scene.add( gridHelper );
-        var texture = new THREE.TextureLoader().load( 'textures/w.jpg' );
-        var sphereGeometry = new THREE.SphereBufferGeometry(30, 60, 40);
-        var sphereMaterial = new THREE.MeshStandardMaterial( { map: texture } );
-        sphere = new THREE.Mesh(sphereGeometry, sphereMaterial);
-        sphere.position.y = -50;
-        sphere.position.x = 0;
-        sphere.position.z = 0;
-				sphere.updateMatrix();
-        sphere.matrixAutoUpdate = true
-				scene.add(sphere)
+			
+        dodecahedron = createDodecahedron(80)
+				dodecahedron.position.y = 160;
+				scene.add( dodecahedron )
+				
+				var axisHelper = createAxes(5000);
+				scene.add( axisHelper );
 
-				/*var geometry = new THREE.SphereBufferGeometry( 5000, 60, 40 );
-				geometry.scale( - 1, 1, 1 );
-				var texture = new THREE.TextureLoader().load( 'textures/2294472375_24a3b8ef46_o.jpg' );
-				var materialBG = new THREE.MeshBasicMaterial( { map: texture } );
-				var mesh = new THREE.Mesh( geometry, materialBG );
-				scene.add( mesh );*/
+        cone = createCone(80, 160, 100);
+				cone.position.y = -160;
+				scene.add( cone )
+
+				
+				var sphere = createSphere(5000, 60, 40)
+				scene.add( sphere );
+
+				var f = create3dFunction()
+				f.position.x = 100
+				scene.add( f );
 
 				var light = new THREE.DirectionalLight( 0xffffff );
 				light.position.set( 1, 1, 1 );
 				scene.add( light );
-				var light = new THREE.DirectionalLight( 0x222222 );
+				var light = new THREE.DirectionalLight( 0x000000 );
 				light.position.set( - 1, - 1, - 1 );
 				scene.add( light );
-				var light = new THREE.AmbientLight( 0x555555 );
+				var light = new THREE.AmbientLight( 0xffffff );
 				scene.add( light );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -100,9 +86,52 @@
 				createControls( perspectiveCamera );
 			}
 
+			function createDodecahedron(radius) {
+				var dodecahedronGeometry = new THREE.DodecahedronGeometry(radius);
+				var wireframe = new THREE.WireframeGeometry( dodecahedronGeometry );
+				dodecahedron = new THREE.LineSegments( wireframe );
+
+				return dodecahedron;
+			}
+
+			function createCone(radius, height, segments) {
+				var coneGeometry = new THREE.ConeGeometry(80, 160, 100);
+        var coneMaterial = new THREE.MeshStandardMaterial( { color: 0x2222ee } );
+        cone = new THREE.Mesh(coneGeometry, coneMaterial);
+
+				return cone
+			}
+
+			function createAxes(length) {
+
+				return new THREE.AxesHelper(length);
+			}
+
+			function createSphere(radius, segmentWidth, segmentHeight) {
+				var geometry = new THREE.SphereBufferGeometry( radius, segmentHeight, segmentWidth );
+				geometry.scale( - 1, 1, 1 );
+				var texture = new THREE.TextureLoader().load( 'textures/2294472375_24a3b8ef46_o.jpg' );
+				var materialBG = new THREE.MeshBasicMaterial( { map: texture } );
+				var sphere = new THREE.Mesh( geometry, materialBG );
+
+				return sphere;
+			}
+
+			function create3dFunction() {
+				var geometry = new THREE.ParametricGeometry( build3DPlot(300, 300), 250, 250 );
+				var material = new THREE.MeshPhongMaterial( { 
+					color: 0xdddd33,
+					side: THREE.DoubleSide
+				 } );
+				var f = new THREE.Mesh( geometry, material );
+				f.doubleSided = true;
+
+				return f;
+			}
+
 			function createControls( camera ) {
 				controls = new TrackballControls( camera, renderer.domElement );
-				controls.rotateSpeed = 4.0;
+				controls.rotateSpeed = 2.0;
 				controls.zoomSpeed = 1.2;
 				controls.panSpeed = 0.8;
 				controls.maxDistance = 5000;
@@ -165,8 +194,21 @@
 				}
 
 				if (changed) {
-					camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.5));
-					camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.5));
+					camera.position.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
+					camera.up.applyQuaternion(quaternion.setFromAxisAngle(vector, 0.15));
+				}
+			}
+
+			function build3DPlot(width, height) {
+				
+				return function f(u, v, point) {
+					let x = u * width
+					let y = v * height
+					let z
+
+					z = Math.sqrt(x * y)
+
+					point.set(x, y, z)
 				}
 			}
 		</script>
