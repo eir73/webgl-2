@@ -16,7 +16,6 @@
 	</head>
 
 	<body>
-		<p>Current Camera state is <span id="camera-state">perspective</span></p>
 		<script type="module">
 			import * as THREE from './three.js-master/build/three.module.js';
 			import Stats from './three.js-master/examples/jsm/libs/stats.module.js';
@@ -32,8 +31,6 @@
 			let cone;
 			let dodecahedron;
 			let camera;
-			let cameraState;
-			const cameraStateText = document.getElementById('camera-state')
 
 			init();
 			animate();
@@ -72,7 +69,7 @@
 				var light = new THREE.DirectionalLight( 0x000000 );
 				light.position.set( - 1, - 1, - 1 );
 				scene.add( light );
-				var light = new THREE.AmbientLight( 0xffffff );
+				var light = new THREE.AmbientLight( 0xaaaaaa );
 				scene.add( light );
 
 				renderer = new THREE.WebGLRenderer( { antialias: true } );
@@ -81,6 +78,12 @@
 				document.body.appendChild( renderer.domElement );
 				stats = new Stats();
 				document.body.appendChild( stats.dom );
+
+				var gui = new GUI();
+				gui.add( params, 'orthographicCamera' ).name( 'use orthographic' ).onChange( function ( value ) {
+					controls.dispose();
+					createControls( value ? orthographicCamera : perspectiveCamera );
+				} );
 
 				window.addEventListener( 'resize', onWindowResize, false );
 				createControls( perspectiveCamera );
@@ -137,6 +140,13 @@
 				controls.maxDistance = 5000;
 			}
 
+			function createControls( camera ) {
+				controls = new TrackballControls( camera, renderer.domElement );
+				controls.rotateSpeed = 4.0;
+				controls.zoomSpeed = 1.2;
+				controls.panSpeed = 0.8;
+			}
+
 			function onWindowResize() {
 				var aspect = window.innerWidth / window.innerHeight;
 				perspectiveCamera.aspect = aspect;
@@ -178,18 +188,6 @@
 					case 'KeyD':
 						vector = new THREE.Vector3( 0, -1, 0 )
 						changed = true
-						break
-					case 'KeyP': 
-						cameraState = perspectiveCamera;
-						controls.dispose();
-						createControls( cameraState );
-						cameraStateText.textContent = 'perspective'
-						break;
-					case 'KeyO': 
-						cameraState = orthographicCamera;
-						controls.dispose();
-						createControls( cameraState );
-						cameraStateText.textContent = 'orthographic'
 						break;
 				}
 
