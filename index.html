@@ -65,7 +65,7 @@
 				scene.background = texture
         var dodecahedronGeometry = new THREE.DodecahedronGeometry(30,1);
 				var material = new THREE.MeshPhongMaterial( { 
-					color: 0x00ffdd, 
+					color: 0x0000dd, 
 					wireframe: true,
 					} );
 				dodecahedron = new THREE.Mesh(dodecahedronGeometry, material);
@@ -98,7 +98,12 @@
 				scene.add( mesh );*/
 	
 				var geometry = new THREE.ParametricGeometry( GraphBuilder(300, 300), 25, 25 );
-				var material = new THREE.MeshBasicMaterial( { color: 0x00ff00, side:THREE.DoubleSide } );
+				var material = new THREE.MeshBasicMaterial( { 
+					color: 0x00ffdd,
+					side: THREE.DoubleSide,
+					opacity: 0.5,
+					transparent: true
+				 } );
 				var klein = new THREE.Mesh( geometry, material );
 				klein.doubleSided = true;
 				scene.add( klein );
